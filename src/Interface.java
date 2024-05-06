@@ -106,24 +106,18 @@ public class Interface {
             case 2:
                 System.out.println("Enter the amount you would like to withdraw:");
                 Scanner withdrawal = new Scanner(System.in);
-                int withdrawAmount = 0;
+                int withdrawAmount;
                 try {
                     withdrawAmount = withdrawal.nextInt();
                     if (withdrawAmount < 0) {
                         throw new InputMismatchException();
                     }
+                    Withdraw withdraw = new Withdraw(account.getName(), account.getPassword(), account.getId(),
+                            account.getBalance());
+                    withdraw.withdraw(withdrawAmount);
                 } catch (InputMismatchException e) {
                     System.out.println("Invalid input. Please enter a number between 0 and " + Integer.MAX_VALUE + ".");
                     break;
-                }
-
-
-                Withdraw withdraw = new Withdraw(account.getName(), account.getPassword(), account.getId(),
-                        account.getBalance());
-                if (withdraw.withdraw(withdrawAmount)) {
-                    System.out.println("Withdrew " + withdrawAmount + " from account " + withdraw.getName());
-                } else {
-                    System.out.println("Withdrawal failed. Not enough funds.");
                 }
                 break;
             case 3:

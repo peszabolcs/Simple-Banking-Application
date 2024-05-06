@@ -9,8 +9,9 @@ public class Deposit extends Account{
     public boolean deposit(int depositAmount) {
         try {
             setBalance(getBalance() + depositAmount);
-            Statement stmt = (Statement) Interface.getConnection().createStatement();
+            Statement stmt = Interface.getConnection().createStatement();
             String sql = "UPDATE users SET balance = " + getBalance() + " WHERE idusers = " + getId();
+            stmt.executeUpdate(sql);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
