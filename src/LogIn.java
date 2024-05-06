@@ -9,9 +9,9 @@ public class LogIn extends Interface {
     }
 
 
-    public boolean login(String username, String password) throws SQLException {
+    public Account login(String username, String password) throws SQLException {
         ResultSet rs =
                 stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'");
-        return rs.next();
+        return rs.next() ? new Account(rs.getString("username"), rs.getString("password"), rs.getInt("idusers"), rs.getInt("balance")) : null;
     }
 }

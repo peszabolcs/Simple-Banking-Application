@@ -1,7 +1,7 @@
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Deposit extends Account {
+public class Deposit extends Account{
     public Deposit(String name, String password, int id, int balance) {
         super(name, password, id, balance);
     }

@@ -5,18 +5,23 @@ import java.util.Scanner;
 
 public class Interface {
     static private int choice;
-    private Connection con;
+    private static Connection con;
     static boolean isLoggedIn = false;
     private Account account = null;
+    static Interface loginInterface = new Interface();
     public static void main(String[] args) throws SQLException {
 
         CreateConnection();
         System.out.println("Welcome to our banking application! What can I help you with today?");
         while (!isLoggedIn) {
-            loginScreen();
+            loginInterface = new Interface();
+            loginInterface.loginScreen();
         }
 
-        loggedInMenu();
+        while (isLoggedIn) {
+            loginInterface.loggedInMenu();
+        }
+
 
     }
 
@@ -38,9 +43,7 @@ public class Interface {
                 String password = scanner.nextLine();
                 System.out.println("Confirm password:");
                 String confirmPassword = scanner.nextLine();
-                Account account = new Account(CreateAccount.createAccount(name, password, confirmPassword));
-                //ccount = CreateAccount.createAccount(name, password, confirmPassword);
-
+                this.account = CreateAccount.createAccount(name, password, confirmPassword);
                 if (this.account != null) {
                     System.out.println("Account created successfully!");
                     isLoggedIn = true;
@@ -55,7 +58,8 @@ public class Interface {
                 System.out.println("Enter your password:");
                 String loginPassword = scanner.nextLine();
                 LogIn login = new LogIn();
-                if (login.login(loginName, loginPassword)) {
+                this.account = login.login(loginName, loginPassword);
+                if (login.login(loginName, loginPassword) != null) {
                     System.out.println("Login successful!");
                     isLoggedIn = true;
                 } else {
@@ -70,7 +74,7 @@ public class Interface {
         }
     }
 
-    public static void loggedInMenu() throws SQLException {
+    public void loggedInMenu() throws SQLException {
         System.out.println("1. Deposit");
         System.out.println("2. Withdraw");
         System.out.println("3. Check balance");
@@ -83,6 +87,8 @@ public class Interface {
                 System.out.println("Enter the amount you would like to deposit:");
                 int depositAmount = scanner.nextInt();
                 scanner.nextLine();
+                Deposit deposit = new Deposit(account.getName(), account.getPassword(), account.getId(),
+                        account.getBalance());
                 if (deposit.deposit(depositAmount)) {
                     System.out.println("Deposited " + depositAmount + " into account " + deposit.getName());
                 } else {
@@ -100,7 +106,7 @@ public class Interface {
             case 4:
                 System.out.println("Logging out...");
                 isLoggedIn = false;
-                loginScreen();
+                loginInterface.loginScreen();
                 break;
             default:
                 System.out.println("Invalid choice");
