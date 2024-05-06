@@ -5,18 +5,18 @@ import java.sql.Statement;
 
 public class CreateAccount extends Interface {
 
-    public static boolean createAccount(String name, String password, String confirmPassword) throws SQLException {
+    public static Account createAccount(String name, String password, String confirmPassword) throws SQLException {
         if (name.length() < 8) {
             System.out.println("Name must be at least 8 characters long");
-            return false;
+            return null;
         }
         if (password.length() < 8 || confirmPassword.length() < 8) {
             System.out.println("Password must be at least 8 characters long");
-            return false;
+            return null;
         }
         if (!password.equals(confirmPassword)) {
             System.out.println("Passwords do not match");
-            return false;
+            return null;
         }
 
         Statement stmt = (Statement) getConnection().createStatement();
@@ -33,10 +33,10 @@ public class CreateAccount extends Interface {
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
 
         Account account = new Account(name, password, setID, 0);
-        return true;
+        return account;
     }
 }
