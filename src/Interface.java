@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Interface {
@@ -32,7 +33,14 @@ public class Interface {
         Scanner scanner = new Scanner(System.in);
         choice = scanner.nextInt();
         scanner.nextLine();
-
+        try {
+            if (choice < 1 || choice > 3) {
+                throw new InputMismatchException();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number between 1 and 3.");
+            return;
+        }
         switch (choice) {
             case 1:
                 System.out.println("Creating an account...");
@@ -70,7 +78,7 @@ public class Interface {
                 System.out.println("Exiting...");
                 break;
             default:
-                System.out.println("Invalid choice");
+                System.out.println("Invalid choice. Please enter a number between 1 and 3.");
         }
     }
 
@@ -97,8 +105,26 @@ public class Interface {
                 break;
             case 2:
                 System.out.println("Enter the amount you would like to withdraw:");
-                int withdrawAmount = scanner.nextInt();
-                scanner.nextLine();
+                Scanner withdrawal = new Scanner(System.in);
+                int withdrawAmount = 0;
+                try {
+                    withdrawAmount = withdrawal.nextInt();
+                    if (withdrawAmount < 0) {
+                        throw new InputMismatchException();
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number between 0 and " + Integer.MAX_VALUE + ".");
+                    break;
+                }
+
+
+                Withdraw withdraw = new Withdraw(account.getName(), account.getPassword(), account.getId(),
+                        account.getBalance());
+                if (withdraw.withdraw(withdrawAmount)) {
+                    System.out.println("Withdrew " + withdrawAmount + " from account " + withdraw.getName());
+                } else {
+                    System.out.println("Withdrawal failed. Not enough funds.");
+                }
                 break;
             case 3:
                 System.out.println("Checking balance...");
