@@ -31,10 +31,10 @@ public class Interface {
                 String name = scanner.nextLine();
                 System.out.println("Enter your password:");
                 String password = scanner.nextLine();
-                CreateAccount account = new CreateAccount(name, password);
+                //CreateAccount account = new CreateAccount(name, password);
                 System.out.println("Confirm password:");
                 String confirmPassword = scanner.nextLine();
-                if (account.createAccount(name, password, confirmPassword)) {
+                if (CreateAccount.createAccount(name, password, confirmPassword)) {
                     System.out.println("Account created successfully!");
                 } else {
                     System.out.println("Account creation failed");
@@ -46,7 +46,12 @@ public class Interface {
                 String loginName = scanner.nextLine();
                 System.out.println("Enter your password:");
                 String loginPassword = scanner.nextLine();
-                new LogIn(loginName, loginPassword);
+                LogIn login = new LogIn();
+                if (login.login(loginName, loginPassword)) {
+                    System.out.println("Login successful!");
+                } else {
+                    System.out.println("Login failed");
+                }
                 break;
             case 3:
                 System.out.println("Exiting...");
@@ -68,7 +73,7 @@ public class Interface {
         }
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         return con;
     }
 }
