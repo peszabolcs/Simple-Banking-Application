@@ -2,8 +2,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
 
-public class Withdraw extends Account{
-    public Withdraw(String name, String password, int id, int balance) {
+public class Withdraw extends Account {
+    Interface interface1 = new Interface();
+    Statement stmt = interface1.getConnection().createStatement();
+    public Withdraw(String name, String password, int id, int balance) throws SQLException {
         super(name, password, id, balance);
     }
 
@@ -21,11 +23,12 @@ public class Withdraw extends Account{
                     }
                 }
                 setBalance(getBalance() - withdrawAmount);
-                Statement stmt = Interface.getConnection().createStatement();
+
                 String sql = "UPDATE users SET balance = " + getBalance() + " WHERE idusers = " + getId();
                 stmt.executeUpdate(sql);
+                interface1.account.setBalance(getBalance());
             } catch (SQLException e) {
-                System.out.println("Withdrew " + withdrawAmount + " from account " + getName());
+                System.out.println("Withdrew failed");
             }
             catch (InputMismatchException e) {
                 System.out.println("Cannot withdraw negative amount");

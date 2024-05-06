@@ -5,7 +5,7 @@ import java.sql.Statement;
 
 public class CreateAccount extends Interface {
 
-    public static Account createAccount(String name, String password, String confirmPassword) throws SQLException {
+    public Account createAccount(String name, String password, String confirmPassword) throws SQLException {
         if (name.length() < 8) {
             System.out.println("Name must be at least 8 characters long");
             return null;
@@ -36,7 +36,6 @@ public class CreateAccount extends Interface {
             return null;
         }
 
-        Account account = new Account(name, password, setID, 0);
-        return account;
+        return new Account(name, password, setID, 0);
     }
 }

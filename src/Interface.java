@@ -7,20 +7,30 @@ import java.util.Scanner;
 public class Interface {
     static private int choice;
     private static Connection con;
+    public static Interface instance;
     static boolean isLoggedIn = false;
-    private Account account = null;
-    static Interface loginInterface = new Interface();
-    public static void main(String[] args) throws SQLException {
+    Account account = null;
 
-        CreateConnection();
+    public static synchronized Interface getInstance() {
+        if (instance == null) {
+            instance = new Interface();
+            instance.createConnection();
+        }
+        return instance;
+    }
+
+    Interface() {
+        createConnection();
+    }
+    public static void main(String[] args) throws SQLException {
+        Interface interfaceInstance = Interface.getInstance();
         System.out.println("Welcome to our banking application! What can I help you with today?");
         while (!isLoggedIn) {
-            loginInterface = new Interface();
-            loginInterface.loginScreen();
+            interfaceInstance.loginScreen();
         }
 
         while (isLoggedIn) {
-            loginInterface.loggedInMenu();
+            interfaceInstance.loggedInMenu();
         }
 
 
@@ -51,7 +61,8 @@ public class Interface {
                 String password = scanner.nextLine();
                 System.out.println("Confirm password:");
                 String confirmPassword = scanner.nextLine();
-                this.account = CreateAccount.createAccount(name, password, confirmPassword);
+                CreateAccount createAccount = new CreateAccount();
+                this.account = createAccount.createAccount(name, password, confirmPassword);
                 if (this.account != null) {
                     System.out.println("Account created successfully!");
                     isLoggedIn = true;
@@ -65,8 +76,9 @@ public class Interface {
                 String loginName = scanner.nextLine();
                 System.out.println("Enter your password:");
                 String loginPassword = scanner.nextLine();
+                //TODO valamiért a login után nem állítódik be az account egyenlege
                 LogIn login = new LogIn();
-                this.account = login.login(loginName, loginPassword);
+                account = login.login(loginName, loginPassword);
                 if (login.login(loginName, loginPassword) != null) {
                     System.out.println("Login successful!");
                     isLoggedIn = true;
@@ -122,11 +134,12 @@ public class Interface {
                 break;
             case 3:
                 System.out.println("Checking balance...");
+                System.out.println("Balance: " + account.getBalance());
                 break;
             case 4:
                 System.out.println("Logging out...");
                 isLoggedIn = false;
-                loginInterface.loginScreen();
+                Interface.getInstance().loginScreen();
                 break;
             default:
                 System.out.println("Invalid choice");
@@ -135,7 +148,7 @@ public class Interface {
 
 
     //SQL database connection
-    public static void CreateConnection() {
+    public void createConnection() {
         String dbUser = System.getenv("DB_USER");
         String dbPassword = System.getenv("DB_PASSWORD");
         try {
@@ -147,7 +160,7 @@ public class Interface {
         }
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         return con;
     }
 }
