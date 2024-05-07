@@ -3,10 +3,12 @@ import java.sql.Statement;
 import java.util.InputMismatchException;
 
 public class Withdraw extends Account {
-    Interface interface1 = new Interface();
-    Statement stmt = interface1.getConnection().createStatement();
-    public Withdraw(String name, String password, int id, int balance) throws SQLException {
+    Interface interface1;
+    Statement stmt;
+    public Withdraw(String name, String password, int id, int balance, Interface interface1) throws SQLException {
         super(name, password, id, balance);
+        this.interface1 = interface1;
+        stmt = interface1.getConnection().createStatement();
     }
 
         public void withdraw(int withdrawAmount) {

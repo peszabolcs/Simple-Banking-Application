@@ -37,6 +37,7 @@ public class Interface {
     }
 
     public void loginScreen() throws SQLException {
+        //TODO ha int helyett stringet adok meg, akkor nem dobja el a hibát
         System.out.println("1. Create an account");
         System.out.println("2. Log in");
         System.out.println("3. Exit");
@@ -76,7 +77,6 @@ public class Interface {
                 String loginName = scanner.nextLine();
                 System.out.println("Enter your password:");
                 String loginPassword = scanner.nextLine();
-                //TODO valamiért a login után nem állítódik be az account egyenlege
                 LogIn login = new LogIn();
                 account = login.login(loginName, loginPassword);
                 if (login.login(loginName, loginPassword) != null) {
@@ -105,10 +105,11 @@ public class Interface {
         switch (choice) {
             case 1:
                 System.out.println("Enter the amount you would like to deposit:");
+                //TODO ha nagyobb számot kap mint ami az intbe belefér, akkor nem dobja el a hibát
                 int depositAmount = scanner.nextInt();
                 scanner.nextLine();
                 Deposit deposit = new Deposit(account.getName(), account.getPassword(), account.getId(),
-                        account.getBalance());
+                        account.getBalance(), this);
                 if (deposit.deposit(depositAmount)) {
                     System.out.println("Deposited " + depositAmount + " into account " + deposit.getName());
                 } else {
@@ -125,7 +126,7 @@ public class Interface {
                         throw new InputMismatchException();
                     }
                     Withdraw withdraw = new Withdraw(account.getName(), account.getPassword(), account.getId(),
-                            account.getBalance());
+                            account.getBalance(), this);
                     withdraw.withdraw(withdrawAmount);
                 } catch (InputMismatchException e) {
                     System.out.println("Invalid input. Please enter a number between 0 and " + Integer.MAX_VALUE + ".");

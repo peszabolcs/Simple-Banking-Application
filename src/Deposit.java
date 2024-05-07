@@ -2,10 +2,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Deposit extends Account{
-    Interface interface2 = new Interface();
-    Statement stmt = interface2.getConnection().createStatement();
-    public Deposit(String name, String password, int id, int balance) throws SQLException {
+    Interface interface2;
+    Statement stmt;
+    public Deposit(String name, String password, int id, int balance, Interface interface2) throws SQLException {
         super(name, password, id, balance);
+        this.interface2 = interface2;
+        stmt = interface2.getConnection().createStatement();
     }
 
     public boolean deposit(int depositAmount) {
@@ -17,6 +19,7 @@ public class Deposit extends Account{
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Deposit failed");
             return false;
         }
 
